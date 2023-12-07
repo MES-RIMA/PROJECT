@@ -1,17 +1,20 @@
 package com.openclassrooms.realestatemanager.models;
 
 public class Photo {
-    private final long id;
-    private final String url;
-    private final String description;
+    private int id;
+    private  String url;
+    private String description;
 
-    public Photo(long id, String url, String description) {
-        this.id = id;
+    public Photo( String url, String description) {
+
         this.url = url;
         this.description = description;
     }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

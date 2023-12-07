@@ -3,35 +3,33 @@ package com.openclassrooms.realestatemanager.models;
 import java.util.List;
 
 public class Property {
-    private long id;
+    private int id;
     private Type type;
     private double price;
     private double surface;
     private int numberOfRooms;
     private String description;
     private List<Photo> photoList;
-    private String address;
-    private List<String> pointOfInterestNearby;
+    private Address address;
+    private List<PointOrInterest> pointOfInterestNearby;
     private boolean isAvailable;
     private long availableSince;
     private long saleDate;
     private RealEstateAgent agent;
 
     public Property(
-            long id,
             Type type,
             double price,
             double surface,
             int numberOfRooms,
             String description,
             List<Photo> photoList,
-            String address,
-            List<String> pointOfInterestNearby,
+            Address address,
+            List<PointOrInterest> pointOfInterestNearby,
             boolean isAvailable,
             long availableSince,
             long saleDate,
             RealEstateAgent agent) {
-        this.id = id;
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -46,11 +44,11 @@ public class Property {
         this.agent = agent;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -98,24 +96,26 @@ public class Property {
         return photoList;
     }
 
-    public void setPhotoList(List<Photo> photoList) {
-        this.photoList = photoList;
+    @SuppressWarnings("unchecked")
+    public void setPhotoList(List<? extends Photo> photoList) {
+        this.photoList = (List<Photo>) photoList;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
-    public List<String> getPointOfInterestNearby() {
+    public List<PointOrInterest> getPointOfInterestNearby() {
         return pointOfInterestNearby;
     }
 
-    public void setPointOfInterestNearby(List<String> pointOfInterestNearby) {
-        this.pointOfInterestNearby = pointOfInterestNearby;
+    @SuppressWarnings("unchecked")
+    public void setPointOfInterestNearby(List<? extends PointOrInterest> pointOfInterestNearby) {
+        this.pointOfInterestNearby = (List<PointOrInterest>) pointOfInterestNearby;
     }
 
     public boolean isAvailable() {
@@ -151,8 +151,43 @@ public class Property {
     }
 
     // -------------- INNER -------------- //
+    public static class PointOrInterest {
+        private final String name;
 
-    enum Type {
+        public PointOrInterest(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    public static class Address {
+        private final String locality;
+        private final String postalCode;
+        private final String formattedAddress;
+
+        public Address(String locality, String postalCode, String formattedAddress) {
+            this.locality = locality;
+            this.postalCode = postalCode;
+            this.formattedAddress = formattedAddress;
+        }
+
+        public String getLocality() {
+            return locality;
+        }
+
+        public String getPostalCode() {
+            return postalCode;
+        }
+
+        public String getFormattedAddress() {
+            return formattedAddress;
+        }
+    }
+
+    public enum Type {
         APARTMENT,
         LOFT,
         MANOR,

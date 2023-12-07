@@ -1,17 +1,19 @@
 package com.openclassrooms.realestatemanager.models;
 
 public class RealEstateAgent {
-    private final long id;
+    private int id;
     private final String name;
     private final Photo photo;
 
-    public RealEstateAgent(long id, String name, Photo photo) {
-        this.id = id;
+    public RealEstateAgent( String name, Photo photo) {
+
         this.name = name;
         this.photo = photo;
     }
-
-    public long getId() {
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int getId() {
         return id;
     }
 
