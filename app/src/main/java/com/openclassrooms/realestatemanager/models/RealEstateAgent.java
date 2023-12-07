@@ -2,17 +2,19 @@ package com.openclassrooms.realestatemanager.models;
 
 public class RealEstateAgent {
     private int id;
-    private final String name;
-    private final Photo photo;
+    private String name;
+    private String photoUrl;
 
-    public RealEstateAgent( String name, Photo photo) {
+    public RealEstateAgent(String name, String photoUrl) {
 
         this.name = name;
-        this.photo = photo;
+        this.photoUrl = photoUrl;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public int getId() {
         return id;
     }
@@ -21,7 +23,15 @@ public class RealEstateAgent {
         return name;
     }
 
-    public Photo getPhoto() {
-        return photo;
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
