@@ -19,17 +19,26 @@ public class Utils {
      * @param dollars
      * @return
      */
-    public static int convertDollarToEuro(int dollars){
-        return (int) Math.round(dollars * 0.812);
+    public static int convertDollarToEuro(int dollars)
+    {
+        return (int) Math.round(dollars * 0.930);
     }
+    /**
+     * Converting euros to dollars
+     *
+     * @return converted amount in dollars
+     */
+    public static int convertEuroToDollar(int euros) {
 
+        return (int) Math.round(euros * 1.08);
+    }
     /**
      * Conversion de la date d'aujourd'hui en un format plus approprié
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
      * @return
      */
     public static String getTodayDate(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(new Date());
     }
 
