@@ -18,6 +18,11 @@ public class PhotoEntity extends Photo {
     public PhotoEntity(String url, String description) {
         super(url, description);
     }
+
+    public PhotoEntity(Photo parent){
+        super(parent.getUrl(), parent.getDescription());
+    }
+
     public Photo toModel(){
         return this;
     }

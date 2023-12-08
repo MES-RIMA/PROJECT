@@ -152,6 +152,7 @@ public class Property {
 
     // -------------- INNER -------------- //
     public static class PointOrInterest {
+        private int id;
         private final String name;
 
         public PointOrInterest(String name) {
@@ -159,10 +160,15 @@ public class Property {
         }
 
         public String getName() {
+
             return name;
         }
-    }
 
+
+    public int getId() {
+        return id;
+    }
+}
     public static class Address {
         private final String locality;
         private final String postalCode;

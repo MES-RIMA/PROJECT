@@ -49,5 +49,20 @@ public class PropertyEntity extends Property {
                 saleDate,
                 null);
     }
-
+    public PropertyEntity(Property parent) {
+        super(
+                parent.getType(),
+                parent.getPrice(),
+                parent.getSurface(),
+                parent.getNumberOfRooms(),
+                parent.getDescription(),
+                parent.getPhotoList(),
+                parent.getAddress(),
+                parent.getPointOfInterestNearby(),
+                parent.isAvailable(),
+                parent.getAvailableSince(),
+                parent.getSaleDate(),
+                parent.getAgent());
+        id = parent.getId();
+    }
 }
