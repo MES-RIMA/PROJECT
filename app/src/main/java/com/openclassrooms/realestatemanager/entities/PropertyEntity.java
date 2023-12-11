@@ -32,8 +32,8 @@ public class PropertyEntity extends Property {
             int numberOfRooms,
             String description,
             Address address,
-            boolean isAvailable,
-            long availableSince,
+            boolean isSold,
+            long publicationDate,
             long saleDate) {
         super(
                 type,
@@ -44,8 +44,8 @@ public class PropertyEntity extends Property {
                null,
                 address,
                 null,
-                isAvailable,
-                availableSince,
+                isSold,
+                publicationDate,
                 saleDate,
                 null);
     }
@@ -59,8 +59,8 @@ public class PropertyEntity extends Property {
                 parent.getPhotoList(),
                 parent.getAddress(),
                 parent.getPointOfInterestNearby(),
-                parent.isAvailable(),
-                parent.getAvailableSince(),
+                parent.isSold(),
+                parent.getPublicationDate(),
                 parent.getSaleDate(),
                 parent.getAgent());
         id = parent.getId();

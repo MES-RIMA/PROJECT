@@ -3,7 +3,7 @@ package com.openclassrooms.realestatemanager.entities;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
+import androidx.room.Ignore;
 import com.openclassrooms.realestatemanager.models.RealEstateAgent;
 @Entity(tableName = "real_estate_agent")
 public class RealEstateAgentEntity extends RealEstateAgent {

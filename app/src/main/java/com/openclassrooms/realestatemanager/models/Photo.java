@@ -5,6 +5,8 @@ public class Photo {
     private  String url;
     private String description;
 
+    public Photo(){}
+
     public Photo( String url, String description) {
 
         this.url = url;
@@ -24,5 +26,12 @@ public class Photo {
 
     public String getDescription() {
         return description;
+    }
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

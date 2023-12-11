@@ -1,21 +1,27 @@
 package com.openclassrooms.realestatemanager.models;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 public class Property {
+    public static final DateTimeFormatter PROPERTY_RELATED_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     private int id;
-    private Type type;
+    private Type type = Type.APARTMENT;
     private double price;
     private double surface;
     private int numberOfRooms;
     private String description;
     private List<Photo> photoList;
+    private String mainPhotoUrl = "";
     private Address address;
-    private List<PointOrInterest> pointOfInterestNearby;
-    private boolean isAvailable;
-    private long availableSince;
+    private List<PointOfInterest> pointOfInterestNearby;
+    private boolean isSold;
+    private long publicationDate;
     private long saleDate;
     private RealEstateAgent agent;
+
+    public Property() {}
 
     public Property(
             Type type,
@@ -25,9 +31,9 @@ public class Property {
             String description,
             List<Photo> photoList,
             Address address,
-            List<PointOrInterest> pointOfInterestNearby,
-            boolean isAvailable,
-            long availableSince,
+            List<PointOfInterest> pointOfInterestNearby,
+            boolean isSold,
+            long publicationDate,
             long saleDate,
             RealEstateAgent agent) {
         this.type = type;
@@ -38,8 +44,8 @@ public class Property {
         this.photoList = photoList;
         this.address = address;
         this.pointOfInterestNearby = pointOfInterestNearby;
-        this.isAvailable = isAvailable;
-        this.availableSince = availableSince;
+        this.isSold = isSold;
+        this.publicationDate = publicationDate;
         this.saleDate = saleDate;
         this.agent = agent;
     }
@@ -109,29 +115,35 @@ public class Property {
         this.address = address;
     }
 
-    public List<PointOrInterest> getPointOfInterestNearby() {
+    public List<PointOfInterest> getPointOfInterestNearby() {
         return pointOfInterestNearby;
     }
 
     @SuppressWarnings("unchecked")
-    public void setPointOfInterestNearby(List<? extends PointOrInterest> pointOfInterestNearby) {
-        this.pointOfInterestNearby = (List<PointOrInterest>) pointOfInterestNearby;
+    public void setPointOfInterestNearby(List<? extends PointOfInterest> pointOfInterestNearby) {
+        this.pointOfInterestNearby = (List<PointOfInterest>) pointOfInterestNearby;
+    }
+    public String getMainPhotoUrl() {
+        return mainPhotoUrl;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public void setMainPhotoUrl(String mainPhotoUrl) {
+        this.mainPhotoUrl = mainPhotoUrl;
+    }
+    public boolean isSold() {
+      return isSold;
     }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setSold(boolean sold) {
+       isSold=sold;
     }
 
-    public long getAvailableSince() {
-        return availableSince;
+    public long getPublicationDate() {
+        return publicationDate;
     }
 
-    public void setAvailableSince(long availableSince) {
-        this.availableSince = availableSince;
+    public void setPublicationDate(long availableSince) {
+        this.publicationDate = availableSince;
     }
 
     public long getSaleDate() {
@@ -151,11 +163,11 @@ public class Property {
     }
 
     // -------------- INNER -------------- //
-    public static class PointOrInterest {
+    public static class PointOfInterest {
         private int id;
         private final String name;
 
-        public PointOrInterest(String name) {
+        public PointOfInterest(String name) {
             this.name = name;
         }
 
@@ -170,9 +182,11 @@ public class Property {
     }
 }
     public static class Address {
-        private final String locality;
-        private final String postalCode;
-        private final String formattedAddress;
+        private  String locality;
+        private String postalCode;
+        private  String formattedAddress;
+
+        public Address(){}
 
         public Address(String locality, String postalCode, String formattedAddress) {
             this.locality = locality;
@@ -180,16 +194,30 @@ public class Property {
             this.formattedAddress = formattedAddress;
         }
 
-        public String getLocality() {
+        public String getLocality()
+        {
             return locality;
         }
 
         public String getPostalCode() {
+
             return postalCode;
         }
 
         public String getFormattedAddress() {
+
             return formattedAddress;
+        }
+        public void setLocality(String locality) {
+            this.locality = locality;
+        }
+
+        public void setPostalCode(String postalCode) {
+            this.postalCode = postalCode;
+        }
+
+        public void setFormattedAddress(String formattedAddress) {
+            this.formattedAddress = formattedAddress;
         }
     }
 
@@ -197,6 +225,9 @@ public class Property {
         APARTMENT,
         LOFT,
         MANOR,
-        HOUSE
+        HOUSE;
+        public static String[] names(){
+            return Arrays.stream(values()).map(Enum::name).toArray(String[]::new);
+        }
     }
 }

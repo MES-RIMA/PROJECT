@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
     <style name="Theme.RealEstateManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/blue_900</item>
@@ -13,10 +13,4 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="colorControlNormal">@color/white</item>
-        <item name="titleTextColor">@color/white</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
 </resources>
