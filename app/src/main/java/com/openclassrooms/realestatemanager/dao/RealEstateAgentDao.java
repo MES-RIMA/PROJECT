@@ -1,9 +1,11 @@
 package com.openclassrooms.realestatemanager.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.openclassrooms.realestatemanager.entities.RealEstateAgentEntity;
@@ -24,7 +26,10 @@ public interface RealEstateAgentDao {
 
     @Insert
     void create(RealEstateAgentEntity agent);
+    @Query("SELECT * FROM real_estate_agent")
+    LiveData<List<RealEstateAgentEntity>> getAll();
 
+    @Transaction
     @Query("SELECT * FROM real_estate_agent")
     List<Relationships.RealEstateAgentWithProperties> getAllAgentWithProperties();
 }

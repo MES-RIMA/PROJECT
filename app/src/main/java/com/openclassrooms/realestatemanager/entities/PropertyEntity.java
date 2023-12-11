@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.entities;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.openclassrooms.realestatemanager.models.Photo;
@@ -23,7 +24,7 @@ public class PropertyEntity extends Property {
     public int agentID;
 
     @Embedded
-    private Address address;
+   public AddressEntity address;
 
     public PropertyEntity(
             Type type,
@@ -31,7 +32,7 @@ public class PropertyEntity extends Property {
             double surface,
             int numberOfRooms,
             String description,
-            Address address,
+            AddressEntity address,
             boolean isSold,
             long publicationDate,
             long saleDate) {
@@ -64,5 +65,14 @@ public class PropertyEntity extends Property {
                 parent.getSaleDate(),
                 parent.getAgent());
         id = parent.getId();
+    }
+    public static class AddressEntity extends Address {
+
+        @Ignore
+        public AddressEntity(){}
+
+        public AddressEntity(String locality, String postalCode, String formattedAddress){
+            super(locality, postalCode, formattedAddress);
+        }
     }
 }

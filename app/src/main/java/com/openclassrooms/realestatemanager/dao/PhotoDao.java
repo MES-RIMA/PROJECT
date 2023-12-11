@@ -1,8 +1,10 @@
 package com.openclassrooms.realestatemanager.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -13,7 +15,8 @@ import java.util.List;
 @Dao
 public interface PhotoDao {
     @Query("SELECT * FROM photo_entity WHERE property_id=:propertyId")
-    List<PhotoEntity> getByPropertyId(int propertyId);
+    LiveData<List<PhotoEntity>> getByPropertyId(int propertyId);
+
 
     @Update
     void update(PhotoEntity photo);
@@ -21,7 +24,7 @@ public interface PhotoDao {
     @Delete
     void delete(PhotoEntity photo);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(PhotoEntity... photo);
 
 }

@@ -25,5 +25,5 @@ public interface PropertyDao {
     void delete(PropertyEntity property);
 
     @Insert
-    void create(PropertyEntity property);
+    long create(PropertyEntity property);
 }

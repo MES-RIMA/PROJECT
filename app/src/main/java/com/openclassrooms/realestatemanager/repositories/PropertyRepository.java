@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.repositories;
 
+import androidx.lifecycle.LiveData;
+
 import com.openclassrooms.realestatemanager.data_provider.PropertyProvider;
 import com.openclassrooms.realestatemanager.models.Property;
 
@@ -17,8 +19,8 @@ public class PropertyRepository {
         this.propertyProvider = propertyProvider;
     }
 
-    public void create(Property property) {
-        doInBackground.execute(() -> propertyProvider.create(property));
+    public LiveData<Integer> create(Property property) {
+        return propertyProvider.create(property);
     }
 
     public Property getById(int id){
@@ -36,5 +38,11 @@ public class PropertyRepository {
     public void delete(Property property) {
         doInBackground.execute(() -> propertyProvider.delete(property));
     }
+    public void addPointOfInterestToProperty(int propertyId, int pointOfInterestId){
+        propertyProvider.associateWithPointOfInterest(propertyId, pointOfInterestId);
+    }
 
+    public void removePointOfInterestFromProperty(int propertyId, int pointOfInterestId) {
+        propertyProvider.removePointOfInterestFromProperty(propertyId, pointOfInterestId);
+    }
 }

@@ -21,7 +21,8 @@ public class Property {
     private long saleDate;
     private RealEstateAgent agent;
 
-    public Property() {}
+    public Property() {
+    }
 
     public Property(
             Type type,
@@ -123,6 +124,7 @@ public class Property {
     public void setPointOfInterestNearby(List<? extends PointOfInterest> pointOfInterestNearby) {
         this.pointOfInterestNearby = (List<PointOfInterest>) pointOfInterestNearby;
     }
+
     public String getMainPhotoUrl() {
         return mainPhotoUrl;
     }
@@ -130,12 +132,13 @@ public class Property {
     public void setMainPhotoUrl(String mainPhotoUrl) {
         this.mainPhotoUrl = mainPhotoUrl;
     }
+
     public boolean isSold() {
-      return isSold;
+        return isSold;
     }
 
     public void setSold(boolean sold) {
-       isSold=sold;
+        isSold = sold;
     }
 
     public long getPublicationDate() {
@@ -172,62 +175,66 @@ public class Property {
         }
 
         public String getName() {
-
             return name;
         }
 
 
-    public int getId() {
-        return id;
-    }
-}
-    public static class Address {
-        private  String locality;
-        private String postalCode;
-        private  String formattedAddress;
-
-        public Address(){}
-
-        public Address(String locality, String postalCode, String formattedAddress) {
-            this.locality = locality;
-            this.postalCode = postalCode;
-            this.formattedAddress = formattedAddress;
+        public int getId() {
+            return id;
         }
 
-        public String getLocality()
-        {
-            return locality;
-        }
-
-        public String getPostalCode() {
-
-            return postalCode;
-        }
-
-        public String getFormattedAddress() {
-
-            return formattedAddress;
-        }
-        public void setLocality(String locality) {
-            this.locality = locality;
-        }
-
-        public void setPostalCode(String postalCode) {
-            this.postalCode = postalCode;
-        }
-
-        public void setFormattedAddress(String formattedAddress) {
-            this.formattedAddress = formattedAddress;
+        public void setId(int id) {
+            this.id = id;
         }
     }
+        public static class Address {
+            private String locality;
+            private String postalCode;
+            private String formattedAddress;
 
-    public enum Type {
-        APARTMENT,
-        LOFT,
-        MANOR,
-        HOUSE;
-        public static String[] names(){
-            return Arrays.stream(values()).map(Enum::name).toArray(String[]::new);
+            public Address() {
+            }
+
+            public Address(String locality, String postalCode, String formattedAddress) {
+                this.locality = locality;
+                this.postalCode = postalCode;
+                this.formattedAddress = formattedAddress;
+            }
+
+            public String getLocality() {
+                return locality;
+            }
+
+            public String getPostalCode() {
+                return postalCode;
+            }
+
+            public String getFormattedAddress() {
+                return formattedAddress;
+            }
+
+            public void setLocality(String locality) {
+                this.locality = locality;
+            }
+
+            public void setPostalCode(String postalCode) {
+                this.postalCode = postalCode;
+            }
+
+            public void setFormattedAddress(String formattedAddress) {
+                this.formattedAddress = formattedAddress;
+            }
+        }
+
+        public enum Type {
+            APARTMENT,
+            LOFT,
+            MANOR,
+            HOUSE;
+
+            public static String[] names() {
+                return Arrays.stream(values()).map(Enum::name).toArray(String[]::new);
+            }
         }
     }
-}
+

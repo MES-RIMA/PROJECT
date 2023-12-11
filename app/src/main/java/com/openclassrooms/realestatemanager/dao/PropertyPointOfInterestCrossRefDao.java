@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.dao;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 
 import com.openclassrooms.realestatemanager.entities.Relationships;
 
@@ -11,6 +12,6 @@ public interface PropertyPointOfInterestCrossRefDao {
     @Delete
     void delete(Relationships.PropertyPointOfInterestCrossRef associationClass);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void create(Relationships.PropertyPointOfInterestCrossRef associationClass);
 }

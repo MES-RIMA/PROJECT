@@ -1,12 +1,22 @@
 package com.openclassrooms.realestatemanager.entities;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import com.openclassrooms.realestatemanager.models.Photo;
 
-@Entity(tableName = "photo_entity")
+@Entity(
+        tableName = "photo_entity",
+        foreignKeys =
+        @ForeignKey(
+                entity = PropertyEntity.class,
+                parentColumns = "property_id",
+                childColumns = "property_id",
+                onDelete = CASCADE))
 public class PhotoEntity extends Photo {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "photo_id")
@@ -21,6 +31,7 @@ public class PhotoEntity extends Photo {
 
     public PhotoEntity(Photo parent){
         super(parent.getUrl(), parent.getDescription());
+        id = parent.getId();
     }
 
     public Photo toModel(){
