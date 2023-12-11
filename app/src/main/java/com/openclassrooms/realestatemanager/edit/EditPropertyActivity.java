@@ -66,12 +66,18 @@ public class EditPropertyActivity extends AppCompatActivity {
     }
 
     private void saveProperty() {
-        viewModel.persist();
-        Snackbar.make(
-                        binding.getRoot(),
-                        getString(R.string.property_successfully_saved_msg),
-                        Snackbar.LENGTH_SHORT)
-                .show();
+        if (viewModel.isPhotoDefined()) {
+            viewModel.persist();
+            Snackbar.make(
+                            binding.getRoot(),
+                            getString(R.string.property_successfully_saved_msg),
+                            Snackbar.LENGTH_SHORT)
+                    .show();
+        } else {
+            Snackbar.make(
+                            binding.getRoot(), getString(R.string.photo_required_msg), Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     private void setEditMode() {
@@ -107,7 +113,7 @@ public class EditPropertyActivity extends AppCompatActivity {
     }
 
     private void setupPhotoList() {
-        PhotoListAdapter photoListAdapter = new PhotoListAdapter(viewModel.getPropertyPhotos());
+        photoListAdapter = new PhotoListAdapter(viewModel.getPropertyPhotos());
         binding.photoRecyclerView.setAdapter(photoListAdapter);
         binding.photoRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -126,6 +132,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                                 pointOfInterestView = getPointOfInterestView(isSelected);
                                 pointOfInterestView.setText(pointOfInterest.getName());
                                 pointOfInterestView.setTag(pointOfInterest.getId());
+                                binding.pointOfInterestsContainer.addView(pointOfInterestView);
                             }
                         });
     }
@@ -177,8 +184,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                     0, 0, R.drawable.ic_baseline_check_24, 0);
         } else {
             pointOfInterestView.setBackgroundResource(R.drawable.unchecked);
-            pointOfInterestView.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    0, 0, 0, 0);
+            pointOfInterestView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
         }
     }
     private void pickAnImage() {
@@ -216,8 +222,11 @@ public class EditPropertyActivity extends AppCompatActivity {
                         R.string.set_txt,
                         ((dialog, which) -> {
                             photo.setDescription(photoDescLayout.photoDescription.getText().toString());
+                            if (photoDescLayout.mainCheckBox.isChecked()) {
+                                viewModel.setMainPhoto(photo);
+                            }
                             viewModel.addPhotoToCurrentProperty(photo);
-                            Log.d("PHOTO_DESCRIPTION", "Desc : " + photo.getDescription());
+                            photoListAdapter.updateList(viewModel.getPropertyPhotos());
                         }))
                 .create()
                 .show();

@@ -12,7 +12,9 @@ public class PointOfInterestEntity extends Property.PointOfInterest {
     public int id;
     public PointOfInterestEntity(Property.PointOfInterest parent){
         super(parent.getName());
-        id = parent.getId();
+        if(parent.getId() != 0){
+            id = parent.getId();
+        }
     }
     public PointOfInterestEntity(String name) {
         super(name);

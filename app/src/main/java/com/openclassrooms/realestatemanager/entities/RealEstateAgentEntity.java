@@ -14,7 +14,9 @@ public class RealEstateAgentEntity extends RealEstateAgent {
 
     public RealEstateAgentEntity(RealEstateAgent parent){
         super(parent.getName(), parent.getPhotoUrl());
-        id = parent.getId();
+        if(parent.getId() != 0){
+            id = parent.getId();
+        }
     }
     public RealEstateAgent toModel() {
         final RealEstateAgent model = new RealEstateAgent(getName(), getPhotoUrl());
