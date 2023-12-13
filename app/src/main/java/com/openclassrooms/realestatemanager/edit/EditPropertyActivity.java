@@ -44,9 +44,9 @@ public class EditPropertyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_property);
         viewModel = new ViewModelProvider(this).get(EditPropertyViewModel.class);
-        setEditMode(); // Create || Update
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setEditMode(); // Create || Update
 
     }
 
@@ -84,10 +84,10 @@ public class EditPropertyActivity extends AppCompatActivity {
         final int propertyId = getIntent().getIntExtra(PropertyDetailActivity.PROPERTY_ID_ARG_KEY, 0);
         if (propertyId != 0) {
             viewModel.updateProperty(propertyId).observe(this, this::setProperty);
-            binding.toolbar.setTitle(R.string.update_property_txt);
+            getSupportActionBar().setTitle(R.string.update_property_txt);
         } else {
             viewModel.createNewProperty().observe(this, this::setProperty);
-            binding.toolbar.setTitle(R.string.create_property_txt);
+            getSupportActionBar().setTitle(R.string.update_property_txt);
         }
     }
     private void setProperty(PropertyDataBinding property){

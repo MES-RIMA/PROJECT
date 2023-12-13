@@ -3,16 +3,22 @@ import static com.openclassrooms.realestatemanager.details.PropertyDetailActivit
 import static com.openclassrooms.realestatemanager.details.PropertyDetailActivity.PROPERTY_ID_ARG_KEY;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.details.PropertyDetailActivity;
@@ -30,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
     PropertyDetailFragment propertyDetailFragment;
     private boolean isLargeScreen;
     private int currentSelectedPropertyID;
-
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    Toolbar toolbar;
     public MainActivity() {
     }
 
@@ -44,8 +51,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.createProperty)
                 .setOnClickListener(__ -> startActivity(new Intent(this, EditPropertyActivity.class)));
         isLargeScreen = findViewById(R.id.detailFragmentContainer) != null;
-        setSupportActionBar(findViewById(R.id.toolbar));
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setupViews();
+    }
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
     }
 
     @Override
@@ -70,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         if (isLargeScreen) {
             setupDetailFragment();
         }
+        setupNavigationDrawer();
     }
 
     private void setupListFragment() {
@@ -78,6 +91,22 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .add(R.id.listFragmentContainer, propertyListFragment)
                 .commit();
+    }
+    private void setupNavigationDrawer(){
+        final DrawerLayout drawerLayout = findViewById(R.id.root);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        final NavigationView navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    private boolean onNavigationItemSelected(MenuItem menuItem){
+        if (menuItem.getItemId() == R.id.map){
+            // TODO implement
+            return true;
+        }
+        return false;
     }
 
 
@@ -96,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
     public void onPropertySelected(Property property) {
         if (isLargeScreen) {
             propertyDetailFragment.setProperty(property);
+            currentSelectedPropertyID = property.getId();
         } else {
             startDetailActivity(property.getId());
         }
