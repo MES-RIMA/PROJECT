@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.activities;
+package com.openclassrooms.realestatemanager.ui;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -13,12 +13,15 @@ import com.openclassrooms.realestatemanager.models.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder> {
     private List<Property> propertyList;
+    private final Consumer<Property> onItemClickListener;
 
-    public PropertyListAdapter(List<Property> propertyList) {
+    public PropertyListAdapter(List<Property> propertyList, Consumer<Property> onItemClickListener) {
         this.propertyList = propertyList;
+        this.onItemClickListener = onItemClickListener;
     }
     @NonNull
     @Override
@@ -33,14 +36,21 @@ public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapte
         final Property property = propertyList.get(position);
         holder.propertyListItemBinding.setProperty(property);
         Glide.with(holder.propertyListItemBinding.getRoot())
-                .load(property.getMainPhotoUrl()).centerCrop().into(holder.propertyListItemBinding.photo);
+                .load(property.getMainPhotoUrl())
+                .centerCrop()
+                .into(holder.propertyListItemBinding.photo);
+        holder
+                .propertyListItemBinding
+                .getRoot()
+                .setOnClickListener(__ -> onItemClickListener.accept(property));
     }
 
     @Override
     public int getItemCount() {
         return propertyList.size();
     }
-    public void updateList(List<Property> newProperties){
+
+    public void updateList(List<Property> newProperties) {
         propertyList = newProperties;
         notifyDataSetChanged();
     }

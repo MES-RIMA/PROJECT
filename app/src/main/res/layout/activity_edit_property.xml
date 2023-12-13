@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"
-                tools:context=".ui.edit.EditPropertyActivity">
+                tools:context=".edit.EditPropertyActivity">
 
                 <TextView
                     android:id="@+id/propertyTypeLabel"
@@ -199,7 +199,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/address_txt"
-                        android:text="@={property.locality}" />
+                        android:text="@={property.formattedAddress}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -219,7 +219,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/locality_txt"
-                        android:text="@={property.formattedAddress}" />
+                        android:text="@={property.locality}" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <Spinner
                     android:id="@+id/agentSelector"

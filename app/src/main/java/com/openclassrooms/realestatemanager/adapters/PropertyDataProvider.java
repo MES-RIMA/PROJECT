@@ -1,7 +1,10 @@
 package com.openclassrooms.realestatemanager.adapters;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.openclassrooms.realestatemanager.dao.PhotoDao;
 import com.openclassrooms.realestatemanager.dao.PointOfInterestDao;
@@ -30,6 +33,7 @@ public class PropertyDataProvider implements PropertyProvider {
     private final Executor doInBackground = Executors.newSingleThreadExecutor();
 
     private MutableLiveData<List<Property>> allProperties;
+    PropertyEntity propertyEntity;
     public PropertyDataProvider(
             RealEstateAgentDao realEstateAgentDao,
             PropertyDao propertyDao,
@@ -44,23 +48,43 @@ public class PropertyDataProvider implements PropertyProvider {
     }
 
     @Override
-    public Property getById(int propertyId) {
-        final PropertyEntity propertyEntity = propertyDao.getById(propertyId);
-        //    final RealEstateAgentEntity agentEntity =
-        // realEstateAgentDao.getById(propertyEntity.agentID);
-        //
-        //    final List<PointOfInterestEntity> pointOfInterestEntities =
-        //        pointOfInterestDao.getPointOfInterestByPropertyId(propertyId);
-        //
-        //    final List<PhotoEntity> photoEntities = photoDao.getByPropertyId(propertyId);
-        //
-        //    propertyEntity.setAgent(agentEntity);
-        //    propertyEntity.setPhotoList(photoEntities);
-        //    propertyEntity.setPointOfInterestNearby(pointOfInterestEntities);
+    public LiveData<Property> getById(int propertyId) {
+        // TODO REFACTORING
+        final MutableLiveData<Property> propertyLiveData = new MutableLiveData<>();
+        doInBackground.execute(
+                () -> {
+                    propertyEntity = propertyDao.getById(propertyId);
+                    propertyEntity.setAgent(realEstateAgentDao.getById(propertyEntity.agentID));
+                });
 
-        return propertyEntity;
+        final LiveData<List<PointOfInterestEntity>> pointOfInterestsLiveData =
+                pointOfInterestDao.getPointOfInterestByPropertyId(propertyId);
+
+        pointOfInterestsLiveData.observeForever(
+                new Observer<List<PointOfInterestEntity>>() {
+
+                    @Override
+                    public void onChanged(List<PointOfInterestEntity> pointOfInterestEntities) {
+                        propertyEntity.setPointOfInterestNearby(pointOfInterestEntities);
+                        pointOfInterestsLiveData.removeObserver(this);
+
+                        final LiveData<List<PhotoEntity>> photoEntitiesLiveData =
+                                photoDao.getByPropertyId(propertyId);
+
+                        photoEntitiesLiveData.observeForever(
+                                new Observer<List<PhotoEntity>>() {
+
+                                    @Override
+                                    public void onChanged(List<PhotoEntity> photoEntities) {
+                                        propertyEntity.setPhotoList(photoEntities);
+                                        photoEntitiesLiveData.removeObserver(this);
+                                        propertyLiveData.setValue(propertyEntity);
+                                    }
+                                });
+                    }
+                });
+        return propertyLiveData;
     }
-
     @Override
     public LiveData<List<Property>> getAll() {
         if (allProperties == null) {
@@ -96,11 +120,13 @@ public class PropertyDataProvider implements PropertyProvider {
         Executors.newSingleThreadExecutor()
                 .execute(
                         () -> {
-                            final int id = (int) propertyDao.create(new PropertyEntity(property));
+                            final PropertyEntity propertyEntity = new PropertyEntity(property);
+                            Log.d("AGENT_ID", "IS :" + propertyEntity.agentID + " | VS :" + property.getAgent().getId());
+                            final int id = (int) propertyDao.create(propertyEntity);
                             liveId.postValue(id);
                             property.setId(id);
                             allProperties.getValue().add(property);
-                            //              allProperties.postValue();
+                            allProperties.postValue(allProperties.getValue());
                         });
         return liveId;
     }

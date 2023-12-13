@@ -6,6 +6,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.openclassrooms.realestatemanager.BR;
+import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.models.Property;
 
 import java.time.LocalDate;
@@ -19,20 +20,23 @@ public class PropertyDataBinding extends BaseObservable {
     public PropertyDataBinding(Property property) {
         this.property = property;
         if (property.getPublicationDate() != 0){
-            publicationDate = LocalDate.ofEpochDay(property.getPublicationDate()).format(PROPERTY_RELATED_DATE_FORMATTER);
+            publicationDate = property.getFormattedPubDate();
+        }else {
+            publicationDate = Utils.getTodayDate();
         }
         if (property.getSaleDate() != 0){
-            saleDate = LocalDate.ofEpochDay(property.getSaleDate()).format(PROPERTY_RELATED_DATE_FORMATTER);
+            saleDate = property.getFormattedSaleDate();
         }
     }
 
 
-    public Property getProperty() {
+    public void apply() {
         property.setPublicationDate(
                 LocalDate.parse(publicationDate, PROPERTY_RELATED_DATE_FORMATTER).toEpochDay());
-        property.setSaleDate(
-                LocalDate.parse(saleDate, PROPERTY_RELATED_DATE_FORMATTER).toEpochDay());
-        return property;
+        if (property.isSold()){
+            property.setSaleDate(LocalDate.parse(saleDate, PROPERTY_RELATED_DATE_FORMATTER).toEpochDay());
+        }
+
     }
     public int getSelectedTypePosition(){
         return property.getType().ordinal();

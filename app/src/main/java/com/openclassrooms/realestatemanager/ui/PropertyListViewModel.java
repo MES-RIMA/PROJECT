@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.activities;
+package com.openclassrooms.realestatemanager.ui;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,12 +10,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MainActivityViewModel extends ViewModel {
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
+public class PropertyListViewModel extends ViewModel {
     private final PropertyRepository propertyRepository;
     private LiveData<List<Property>> allProperties;
 
     @Inject
-    public MainActivityViewModel(PropertyRepository propertyRepository) {
+    public PropertyListViewModel(PropertyRepository propertyRepository) {
         this.propertyRepository = propertyRepository;
     }
 

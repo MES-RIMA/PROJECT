@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.edit;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -27,14 +26,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityEditPropertyBinding;
 import com.openclassrooms.realestatemanager.databinding.PhotoDescriptionEditorLayoutBinding;
+import com.openclassrooms.realestatemanager.details.PropertyDetailActivity;
 import com.openclassrooms.realestatemanager.models.Photo;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.ui.PhotoListAdapter;
 
-import java.util.ArrayList;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class EditPropertyActivity extends AppCompatActivity {
-    public static final String PROPERTY_ID_KEY = "PROPERTY_ID_KEY";
 
     private ActivityEditPropertyBinding binding;
     private EditPropertyViewModel viewModel;
@@ -47,7 +47,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         setEditMode(); // Create || Update
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setupViews();
+
     }
 
     @Override
@@ -81,14 +81,18 @@ public class EditPropertyActivity extends AppCompatActivity {
     }
 
     private void setEditMode() {
-        final int propertyId = getIntent().getIntExtra(PROPERTY_ID_KEY, 0);
-        if(propertyId != 0) {
-            viewModel.updateProperty(propertyId).observe(this, binding::setProperty);
+        final int propertyId = getIntent().getIntExtra(PropertyDetailActivity.PROPERTY_ID_ARG_KEY, 0);
+        if (propertyId != 0) {
+            viewModel.updateProperty(propertyId).observe(this, this::setProperty);
             binding.toolbar.setTitle(R.string.update_property_txt);
         } else {
-            binding.setProperty(viewModel.createNewProperty());
+            viewModel.createNewProperty().observe(this, this::setProperty);
             binding.toolbar.setTitle(R.string.create_property_txt);
         }
+    }
+    private void setProperty(PropertyDataBinding property){
+        binding.setProperty(property);
+        setupViews();
     }
 
     private void setupViews() {
@@ -108,8 +112,10 @@ public class EditPropertyActivity extends AppCompatActivity {
     }
 
     private void setupAgentSelector() {
-        final AgentSpinnerAdapter adapter = new AgentSpinnerAdapter(this, viewModel.getAllAgents());
-        binding.agentSelector.setAdapter(adapter);
+        viewModel.getAllAgents().observe(this, agentList -> {
+            final AgentSpinnerAdapter adapter = new AgentSpinnerAdapter(this, agentList);
+            binding.agentSelector.setAdapter(adapter);
+        });
     }
 
     private void setupPhotoList() {
@@ -131,13 +137,14 @@ public class EditPropertyActivity extends AppCompatActivity {
                                 isSelected = viewModel.containsPointOfInterest(pointOfInterest);
                                 pointOfInterestView = getPointOfInterestView(isSelected);
                                 pointOfInterestView.setText(pointOfInterest.getName());
-                                pointOfInterestView.setTag(pointOfInterest.getId());
+                                pointOfInterestView.setTag(pointOfInterest);
                                 binding.pointOfInterestsContainer.addView(pointOfInterestView);
                             }
                         });
     }
 
     private void createPointOfInterest(String pointOfInterestName) {
+        Log.d("CREATE_POINT_OF_I", "CALLED WITH VALUE : " + pointOfInterestName);
         if (pointOfInterestName.length() < 3) return;
         final Property.PointOfInterest pointOfInterest = new Property.PointOfInterest(pointOfInterestName);
         viewModel
@@ -145,11 +152,11 @@ public class EditPropertyActivity extends AppCompatActivity {
                 .observe(
                         this,
                         pointOfInterestId -> {
+                            if(pointOfInterestId == null || pointOfInterestId.equals(0)) return;
                             final TextView pointOfInterestView = getPointOfInterestView(false);
                             pointOfInterest.setId(pointOfInterestId);
                             pointOfInterestView.setText(pointOfInterestName);
                             pointOfInterestView.setTag(pointOfInterest);
-                            binding.pointOfInterestsContainer.addView(pointOfInterestView);
                             binding.addPointOfInterest.setVisibility(View.GONE);
                         });
     }

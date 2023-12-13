@@ -1,11 +1,13 @@
 package com.openclassrooms.realestatemanager.models;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
 public class Property {
-    public static final DateTimeFormatter PROPERTY_RELATED_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    public static final DateTimeFormatter PROPERTY_RELATED_DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("MM/dd/yyyy");
     private int id;
     private Type type = Type.APARTMENT;
     private double price;
@@ -149,12 +151,20 @@ public class Property {
         this.publicationDate = availableSince;
     }
 
+    public String getFormattedPubDate() {
+        return LocalDate.ofEpochDay(getPublicationDate()).format(PROPERTY_RELATED_DATE_FORMATTER);
+    }
+
     public long getSaleDate() {
         return saleDate;
     }
 
     public void setSaleDate(long saleDate) {
         this.saleDate = saleDate;
+    }
+
+    public String getFormattedSaleDate() {
+        return LocalDate.ofEpochDay(getSaleDate()).format(PROPERTY_RELATED_DATE_FORMATTER);
     }
 
     public RealEstateAgent getAgent() {
@@ -186,7 +196,13 @@ public class Property {
         public void setId(int id) {
             this.id = id;
         }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
+
         public static class Address {
             private String locality;
             private String postalCode;
